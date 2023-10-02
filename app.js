@@ -5,17 +5,21 @@ const app = express();
 
 app.get("/api/topics", getTopics);
 
+// //WRONG URL Errors handling
 app.all("*", (req, res) => {
-  throw new Error("Bad request");
+  res.status(404).send({
+    msg: "Bad request URL",
+    status: 404,
+  });
 });
 
-//WRONG URL Errors handling
+// PSQL Errors handling
 app.use((err, req, res, next) => {
-  if (err.message === "Bad request") {
-    res.status(400).send({
-      msg: err.message,
-      status: 400,
-    });
+  if (err.code === "23502") {
+    res.status(400).send({ msg: "Bad request" });
+  }
+  if (err.code === "22P02") {
+    res.status(400).send({ msg: "Bad request" });
   }
 
   next(err);
@@ -23,12 +27,18 @@ app.use((err, req, res, next) => {
 
 // Custom Errors handling
 app.use((err, req, res, next) => {
-  if (err.status) {
-    console.log("sss");
+  if (err.status && err.msg) {
     res.status(err.status).send({
       msg: err.msg,
     });
   }
+
+  next(err);
+});
+
+// Server Errors handling
+app.use((err, req, res, next) => {
+  res.status(500).send({ msg: "Internal Server Error" });
 });
 
 module.exports = app;
