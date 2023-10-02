@@ -8,6 +8,14 @@ beforeEach(() => seed(data));
 
 afterAll(() => db.end());
 
-describe("/api/treasures", () => {
-    test("GET:200 sends an array of treasures to the client", () => {  })
-})
+describe("/api/topics", () => {
+  test("GET:200 sends an array of topics to the client", () => {
+    return request(app)
+      .get("/api/topics")
+      .expect(200)
+      .then(({ body }) => {
+        const topics = body.topics;
+        expect(topics).toHaveLength(3);
+      });
+  });
+});
