@@ -8,6 +8,19 @@ beforeEach(() => seed(data));
 
 afterAll(() => db.end());
 
+describe("/wrong-request", () => {
+  // ERROR TESTING
+  test("GET:400 when request was made to wrong URL", () => {
+    return request(app)
+      .get("/wrong-request")
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Bad request");
+        expect(body.status).toBe(400);
+      });
+  });
+});
+
 describe("/api/topics", () => {
   test("GET:200 sends an array of topics to the client", () => {
     return request(app)
