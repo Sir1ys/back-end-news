@@ -31,8 +31,8 @@ describe("/api/topics", () => {
 
         expect(topics.length).toBe(3);
         topics.forEach((topic) => {
-          expect(typeof topic.slug).toBe("string");
-          expect(typeof topic.description).toBe("string");
+          expect(topic).toHaveProperty("slug", expect.any(String));
+          expect(topic).toHaveProperty("description", expect.any(String));
         });
       });
   });
