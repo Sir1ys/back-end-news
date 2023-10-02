@@ -1,9 +1,12 @@
 const express = require("express");
 const { getTopics } = require("./controllers/topics.controller");
+const { getEndpoints } = require("./controllers/api.controller");
 
 const app = express();
 
 app.get("/api/topics", getTopics);
+
+app.get("/api", getEndpoints);
 
 // //WRONG URL Errors handling
 app.all("*", (req, res) => {
