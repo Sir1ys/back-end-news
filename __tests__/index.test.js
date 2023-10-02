@@ -15,7 +15,12 @@ describe("/api/topics", () => {
       .expect(200)
       .then(({ body }) => {
         const topics = body.topics;
+
         expect(topics).toHaveLength(3);
+        topics.forEach((topic) => {
+          expect(typeof topic.slug).toBe("string");
+          expect(typeof topic.description).toBe("string");
+        });
       });
   });
 });
