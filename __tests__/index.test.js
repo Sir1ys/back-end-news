@@ -3,6 +3,7 @@ const request = require("supertest");
 const db = require("../db/connection");
 const seed = require("../db/seeds/seed");
 const data = require("../db/data/test-data");
+const endpoints = require("../endpoints.json");
 
 beforeEach(() => seed(data));
 
@@ -37,6 +38,7 @@ describe("/api/topics", () => {
       });
   });
 });
+
 
 describe("/api/articles/:article_id", () => {
   test("GET:200 sends a single article to the client", () => {
@@ -73,6 +75,14 @@ describe("/api/articles/:article_id", () => {
       .expect(400)
       .then(({ body }) => {
         expect(body.msg).toBe("Invalid input");
+
+describe("/api", () => {
+  test("GET:200 sends an object describing all the available endpoints on your API", () => {
+    return request(app)
+      .get("/api")
+      .expect(200)
+      .then(({ body }) => {
+        expect(body).toEqual(endpoints);
       });
   });
 });
