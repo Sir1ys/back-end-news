@@ -57,7 +57,7 @@ describe("/api/articles/:article_id", () => {
       .expect(200)
       .then(({ body }) => {
         const { article } = body;
-        
+
         expect(article).toEqual(
           expect.objectContaining({
             article_id: 4,
@@ -89,6 +89,34 @@ describe("/api/articles/:article_id", () => {
       .expect(400)
       .then(({ body }) => {
         expect(body.msg).toBe("Invalid input");
+      });
+  });
+});
+
+describe("/api/articles/:article_id/comments", () => {
+  test("GET:200 sends an array of comments for a single article to the client", () => {
+    return request(app)
+      .get("/api/articles/3/comments")
+      .expect(200)
+      .then(({ body }) => {
+        const comments = body.comments;
+
+        // checking the length of comments array
+        expect(comments.length).toBe(2);
+
+        // checking the instance of comments
+        comments.forEach((comment) => {
+          expect(comment).toEqual(
+            expect.objectContaining({
+              comment_id: expect.any(Number),
+              votes: expect.any(Number),
+              created_at: expect.any(String),
+              author: expect.any(String),
+              body: expect.any(String),
+              article_id: 3,
+            })
+          );
+        });
       });
   });
 });
