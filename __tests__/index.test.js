@@ -57,7 +57,7 @@ describe("/api/articles/:article_id", () => {
       .expect(200)
       .then(({ body }) => {
         const { article } = body;
-        
+
         expect(article).toEqual(
           expect.objectContaining({
             article_id: 4,
@@ -89,6 +89,19 @@ describe("/api/articles/:article_id", () => {
       .expect(400)
       .then(({ body }) => {
         expect(body.msg).toBe("Invalid input");
+      });
+  });
+});
+
+describe("/api/articles", () => {
+  test("GET:200 sends an array of articles to the client", () => {
+    return request(app)
+      .get("/api/articles")
+      .expect(200)
+      .then(({ body }) => {
+        const articles = body.articles;
+
+        expect(articles.length).toBe(13);
       });
   });
 });
