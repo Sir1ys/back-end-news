@@ -1,6 +1,12 @@
 const express = require("express");
 const { getTopics } = require("./controllers/topics.controller");
 const { getArticle } = require("./controllers/articles-controller");
+const {
+  handleCustomErrors,
+  handlePsqlErrors,
+  handleServerErrors,
+  handleWrongUrlErrors,
+} = require("./errors");
 
 const app = express();
 
@@ -9,39 +15,15 @@ app.get("/api/topics", getTopics);
 app.get("/api/articles/:article_id", getArticle);
 
 // //WRONG URL Errors handling
-app.all("*", (req, res) => {
-  res.status(404).send({
-    msg: "Bad request URL",
-    status: 404,
-  });
-});
+app.all("*", handleWrongUrlErrors);
 
 // PSQL Errors handling
-app.use((err, req, res, next) => {
-  if (err.code === "23502") {
-    res.status(400).send({ msg: "Bad request" });
-  }
-  if (err.code === "22P02") {
-    res.status(400).send({ msg: "Bad request" });
-  }
-
-  next(err);
-});
+app.use(handlePsqlErrors);
 
 // Custom Errors handling
-app.use((err, req, res, next) => {
-  if (err.status && err.msg) {
-    res.status(err.status).send({
-      msg: err.msg,
-    });
-  }
-
-  next(err);
-});
+app.use(handleCustomErrors);
 
 // Server Errors handling
-app.use((err, req, res, next) => {
-  res.status(500).send({ msg: "Internal Server Error" });
-});
+app.use(handleServerErrors);
 
 module.exports = app;
