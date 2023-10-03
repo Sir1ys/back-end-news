@@ -22,7 +22,7 @@ app.get("/api/articles/:article_id", getArticle);
 
 app.get("/api", getEndpoints);
 
-app.get("/api", getArticles);
+app.get("/api/articles", getArticles);
 
 // //WRONG URL Errors handling
 app.all("*", handleWrongUrlErrors);

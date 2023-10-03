@@ -101,6 +101,7 @@ describe("/api/articles", () => {
       .then(({ body }) => {
         const articles = body.articles;
 
+        //array of articles test
         expect(articles.length).toBe(13);
       });
   });

@@ -13,4 +13,8 @@ exports.fetchArticle = (article_id) => {
   });
 };
 
-exports.fetchArticles = () => {};
+exports.fetchArticles = () => {
+  const query = "SELECT * FROM articles";
+
+  return db.query(query).then(({ rows }) => rows);
+};
