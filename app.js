@@ -1,7 +1,10 @@
 const express = require("express");
 const { getTopics } = require("./controllers/topics.controller");
 
-const { getArticle } = require("./controllers/articles-controller");
+const {
+  getArticle,
+  getArticles,
+} = require("./controllers/articles-controller");
 const {
   handleCustomErrors,
   handlePsqlErrors,
@@ -18,6 +21,8 @@ app.get("/api/topics", getTopics);
 app.get("/api/articles/:article_id", getArticle);
 
 app.get("/api", getEndpoints);
+
+app.get("/api", getArticles);
 
 // //WRONG URL Errors handling
 app.all("*", handleWrongUrlErrors);

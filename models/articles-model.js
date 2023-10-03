@@ -12,3 +12,5 @@ exports.fetchArticle = (article_id) => {
     return { article: rows[0] };
   });
 };
+
+exports.fetchArticles = () => {};
