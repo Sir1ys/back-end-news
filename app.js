@@ -11,11 +11,9 @@ const {
 
 const { getEndpoints } = require("./controllers/api.controller");
 
-
 const app = express();
 
 app.get("/api/topics", getTopics);
-
 
 app.get("/api/articles/:article_id", getArticle);
 

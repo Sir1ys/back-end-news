@@ -103,7 +103,4 @@ describe("formatComments", () => {
   });
 });
 
-
-describe('', () => {
-  
-})
+describe("", () => {});
