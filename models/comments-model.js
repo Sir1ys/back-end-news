@@ -17,6 +17,12 @@ exports.fetchComments = (article_id) => {
 };
 
 exports.createComment = (article_id, { username: author, body }) => {
+  if (!author || !body) {
+    return Promise.reject({
+      msg: `Required field (username or body) is missing`,
+      status: 400,
+    });
+  }
   const query =
     "INSERT INTO comments (body, author, article_id) VALUES ($1, $2, $3) RETURNING *;";
 

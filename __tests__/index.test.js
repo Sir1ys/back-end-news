@@ -202,6 +202,33 @@ describe("/api/articles/:article_id/comments", () => {
       });
   });
 
+  test("POST: 201 sends the posted comment for a particular article. Also, it should ignore any unnecessary properties on the sent comment object", () => {
+    const commentData = {
+      hobbie: "Reading books", // unnecessary property
+      username: "butter_bridge",
+      body: "This is a part of our history",
+    };
+
+    return request(app)
+      .post("/api/articles/13/comments")
+      .send(commentData)
+      .expect(201)
+      .then(({ body }) => {
+        const comment = body.comment;
+
+        expect(comment).toEqual(
+          expect.objectContaining({
+            comment_id: expect.any(Number),
+            votes: 0,
+            created_at: expect.any(String),
+            author: "butter_bridge",
+            body: "This is a part of our history",
+            article_id: 13,
+          })
+        );
+      });
+  });
+
   //ERROR TESTING
   test("GET: 400 when passing id is not valid", () => {
     return request(app)
@@ -211,7 +238,7 @@ describe("/api/articles/:article_id/comments", () => {
         expect(body.msg).toBe("Invalid input");
       });
   });
-  
+
   test("GET: 404 when passing id doesn't match any of articles", () => {
     return request(app)
       .get("/api/articles/3000/comments")
@@ -234,6 +261,20 @@ describe("/api/articles/:article_id/comments", () => {
       .expect(400)
       .then(({ body }) => {
         expect(body.msg).toBe("Invalid input");
+      });
+  });
+
+  test("POST: 400 when missing required field in the sent object", () => {
+    const commentData = {
+      body: "This is a part of our history",
+    };
+
+    return request(app)
+      .post("/api/articles/3/comments")
+      .send(commentData)
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Required field (username or body) is missing");
       });
   });
 
