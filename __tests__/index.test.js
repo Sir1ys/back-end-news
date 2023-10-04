@@ -73,6 +73,30 @@ describe("/api/articles/:article_id", () => {
       });
   });
 
+  //PATCH testing
+  test("PATCH: 200 returns an article object with the votes property updated", () => {
+    return request(app)
+      .patch("/api/articles/1")
+      .send({ inc_votes: 50 })
+      .expect(200)
+      .then(({ body }) => {
+        const { article } = body;
+
+        expect(article).toEqual(
+          expect.objectContaining({
+            article_id: 1,
+            author: expect.any(String),
+            title: expect.any(String),
+            body: expect.any(String),
+            topic: expect.any(String),
+            created_at: expect.any(String),
+            votes: 150, //100 is in database
+            article_img_url: expect.any(String),
+          })
+        );
+      });
+  });
+
   //ERROR TESTING
   test("GET: 404 when passing id doesn't match any of articles", () => {
     return request(app)
