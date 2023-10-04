@@ -1,9 +1,9 @@
 const express = require("express");
 const { getTopics } = require("./controllers/topics-controller");
 
-
 const { getEndpoints } = require("./controllers/api-controller");
-const { getComments } = require("./controllers/comments-controller");
+
+const { getComments, deleteComment } = require("./controllers/comments-controller");
 
 const {
   getArticle,
@@ -28,6 +28,8 @@ app.get("/api", getEndpoints);
 app.get("/api/articles", getArticles);
 
 app.get("/api/articles/:article_id/comments", getComments);
+
+app.delete("/api/comments/:comment_id", deleteComment);
 
 // //WRONG URL Errors handling
 app.all("*", handleWrongUrlErrors);
