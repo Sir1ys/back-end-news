@@ -26,6 +26,11 @@ exports.fetchArticles = (topic) => {
   if (topic !== undefined && topicGreenList.includes(topic)) {
     query += ` WHERE articles.topic = $1`;
     values.push(topic);
+  } else if (topic !== undefined && !topicGreenList.includes(topic)) {
+    return Promise.reject({
+      msg: "Topic which is passed is invalid",
+      status: 400,
+    });
   }
 
   query += ` GROUP BY articles.article_id

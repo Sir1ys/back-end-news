@@ -130,7 +130,7 @@ describe("/api/articles", () => {
       });
   });
 
-  test("GET: 200 sends an array of articles to the client filtered by topic", () => {
+  test("GET: 200 sends an array of articles to the client filtered by topic = mitch", () => {
     return request(app)
       .get("/api/articles?topic=mitch")
       .expect(200)
@@ -144,6 +144,34 @@ describe("/api/articles", () => {
         expect(articles.every((article) => article.topic === "mitch")).toBe(
           true
         );
+      });
+  });
+
+  test("GET: 200 sends an array of articles to the client filtered by topic = cats", () => {
+    return request(app)
+      .get("/api/articles?topic=cats")
+      .expect(200)
+      .then(({ body }) => {
+        const articles = body.articles;
+
+        // checking the array
+        expect(articles.length).toBe(1);
+
+        // checking each article
+        expect(articles.every((article) => article.topic === "cats")).toBe(
+          true
+        );
+      });
+  });
+
+  //ERROR TESTING
+
+  test("GET: 400 when passed topic is invalid", () => {
+    return request(app)
+      .get("/api/articles?topic=dogs") //there is no dogs topic 
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Topic which is passed is invalid");
       });
   });
 });
