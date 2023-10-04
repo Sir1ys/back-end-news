@@ -141,7 +141,9 @@ describe("/api/articles", () => {
         expect(articles.length).toBe(12);
 
         // checking each article
-        expect(articles).every((article) => article.topic === "mitch");
+        expect(articles.every((article) => article.topic === "mitch")).toBe(
+          true
+        );
       });
   });
 });
