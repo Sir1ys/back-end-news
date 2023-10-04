@@ -20,5 +20,12 @@ exports.getArticles = (req, res, next) => {
 };
 
 exports.patchArticle = (req, res, next) => {
-  updateArticle();
+  const { article_id } = req.params;
+  const articleData = req.body;
+
+  updateArticle(article_id, articleData)
+    .then(({ article }) => {
+      res.status(200).send({ article });
+    })
+    .catch((err) => next(err));
 };

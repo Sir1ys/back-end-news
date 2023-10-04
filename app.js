@@ -29,6 +29,8 @@ app.get("/api/articles", getArticles);
 
 app.get("/api/articles/:article_id/comments", getComments);
 
+app.use(express.json());
+
 app.patch("/api/articles/:article_id", patchArticle);
 
 // //WRONG URL Errors handling
