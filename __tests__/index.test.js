@@ -11,7 +11,7 @@ afterAll(() => db.end());
 
 describe("/wrong-request", () => {
   // ERROR TESTING
-  test("GET:404 when request was made to wrong URL", () => {
+  test("GET: 404 when request was made to wrong URL", () => {
     return request(app)
       .get("/wrong-request")
       .expect(404)
@@ -23,7 +23,7 @@ describe("/wrong-request", () => {
 });
 
 describe("/api/topics", () => {
-  test("GET:200 sends an array of topics to the client", () => {
+  test("GET: 200 sends an array of topics to the client", () => {
     return request(app)
       .get("/api/topics")
       .expect(200)
@@ -40,7 +40,7 @@ describe("/api/topics", () => {
 });
 
 describe("/api", () => {
-  test("GET:200 sends an object describing all the available endpoints on your API", () => {
+  test("GET: 200 sends an object describing all the available endpoints on your API", () => {
     return request(app)
       .get("/api")
       .expect(200)
@@ -51,7 +51,7 @@ describe("/api", () => {
 });
 
 describe("/api/articles/:article_id", () => {
-  test("GET:200 sends a single article to the client", () => {
+  test("GET: 200 sends a single article to the client", () => {
     return request(app)
       .get("/api/articles/4")
       .expect(200)
@@ -94,7 +94,7 @@ describe("/api/articles/:article_id", () => {
 });
 
 describe("/api/articles", () => {
-  test("GET:200 sends an array of articles to the client", () => {
+  test("GET: 200 sends an array of articles to the client", () => {
     return request(app)
       .get("/api/articles")
       .expect(200)
@@ -132,7 +132,8 @@ describe("/api/articles", () => {
 });
 
 describe("/api/articles/:article_id/comments", () => {
-  test("GET:200 sends an array of comments for a single article to the client", () => {
+  // GET REQUESTS TESTING
+  test("GET: 200 sends an array of comments for a single article to the client", () => {
     return request(app)
       .get("/api/articles/3/comments")
       .expect(200)
@@ -163,7 +164,7 @@ describe("/api/articles/:article_id/comments", () => {
       });
   });
 
-  test("GET:200 sends an empty array for a single article to the client if there are no comments written to this article", () => {
+  test("GET: 200 sends an empty array for a single article to the client if there are no comments written to this article", () => {
     return request(app)
       .get("/api/articles/13/comments")
       .expect(200)
@@ -171,6 +172,32 @@ describe("/api/articles/:article_id/comments", () => {
         const comments = body.comments;
         // checking the length of comments array
         expect(comments.length).toBe(0);
+      });
+  });
+
+  // POST REQUESTS TESTING
+  test("POST: 201 sends the posted comment for a particular article", () => {
+    const commentData = {
+      username: "Sasha",
+      body: "This is a part of our history",
+    };
+
+    return request(app)
+      .post("/api/articles/13/comments")
+      .send(commentData)
+      .expect(201)
+      .then(({ body }) => {
+        const comment = body.comment;
+        expect(comment).toEqual(
+          expect.objectContaining({
+            comment_id: expect.any(Number),
+            votes: 0,
+            created_at: expect.any(String),
+            author: expect.any(String),
+            body: expect.any(String),
+            article_id: 13,
+          })
+        );
       });
   });
 
