@@ -193,3 +193,9 @@ describe("/api/articles/:article_id/comments", () => {
       });
   });
 });
+
+describe("/api/comments/:comment_id", () => {
+  test("DELETE: 204 send a status 204 and no content if request is successfull", () => {
+    return request(app).delete("/api/comments/3").expect(204);
+  });
+});
