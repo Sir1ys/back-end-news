@@ -17,9 +17,16 @@ exports.fetchComments = (article_id) => {
 };
 
 exports.removeComment = (comment_id) => {
-  const query = "DELETE FROM comments WHERE comment_id = $1;";
+  const query = "DELETE FROM comments WHERE comment_id = $1 RETURNING *;";
 
   const values = [comment_id];
 
-  return db.query(query, values);
+  return db.query(query, values).then(({ rows }) => {
+    if (rows.length === 0) {
+      return Promise.reject({
+        msg: `Comment with id ${comment_id} does not exist`,
+        status: 404,
+      });
+    }
+  });
 };

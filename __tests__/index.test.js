@@ -194,8 +194,27 @@ describe("/api/articles/:article_id/comments", () => {
   });
 });
 
-describe.only("/api/comments/:comment_id", () => {
+describe("/api/comments/:comment_id", () => {
   test("DELETE: 204 send a status 204 and no content if request is successfull", () => {
     return request(app).delete("/api/comments/3").expect(204);
+  });
+
+  //ERROR TESTING
+  test("DELETE: 400 when passing id is not valid", () => {
+    return request(app)
+      .delete("/api/comments/hello")
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Invalid input");
+      });
+  });
+
+  test("DELETE: 404 when passing id doesn't match any of comments", () => {
+    return request(app)
+      .delete("/api/comments/4000")
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Comment with id 4000 does not exist");
+      });
   });
 });
