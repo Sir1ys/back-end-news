@@ -188,11 +188,21 @@ describe("/api/articles/:article_id", () => {
 
   test("PATCH: 400 when required parameter is missing", () => {
     return request(app)
-      .patch("/api/articles/hello")
+      .patch("/api/articles/1")
       .send({})
       .expect(400)
       .then(({ body }) => {
         expect(body.msg).toBe("Required parameter is missing.");
+      });
+  });
+
+  test("PATCH: 400 when required parameter is invalid", () => {
+    return request(app)
+      .patch("/api/articles/1")
+      .send({ inc_votes: "cat" })
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Invalid input");
       });
   });
 });
