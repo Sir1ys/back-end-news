@@ -93,6 +93,66 @@ describe("/api/articles/:article_id", () => {
   });
 });
 
+describe("/api/articles/:article_id/comments", () => {
+  test("GET:200 sends an array of comments for a single article to the client", () => {
+    return request(app)
+      .get("/api/articles/3/comments")
+      .expect(200)
+      .then(({ body }) => {
+        const comments = body.comments;
+
+        // checking the length of comments array
+        expect(comments.length).toBe(2);
+
+        // checking whether they are sorted by date by default
+        expect(comments).toBeSortedBy("created_at", {
+          descending: true,
+        });
+
+        // checking the instance of comments
+        comments.forEach((comment) => {
+          expect(comment).toEqual(
+            expect.objectContaining({
+              comment_id: expect.any(Number),
+              votes: expect.any(Number),
+              created_at: expect.any(String),
+              author: expect.any(String),
+              body: expect.any(String),
+              article_id: 3,
+            })
+          );
+        });
+      });
+  });
+
+  test("GET:200 sends an empty array for a single article to the client if there are no comments written to this article", () => {
+    return request(app)
+      .get("/api/articles/13/comments")
+      .expect(200)
+      .then(({ body }) => {
+        const comments = body.comments;
+        // checking the length of comments array
+        expect(comments.length).toBe(0);
+      });
+  });
+
+  //ERROR TESTING
+  test("GET: 400 when passing id is not valid", () => {
+    return request(app)
+      .get("/api/articles/hello/comments")
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Invalid input");
+      });
+  });
+
+  test("GET: 404 when passing id doesn't match any of articles", () => {
+    return request(app)
+      .get("/api/articles/3000/comments")
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Article with id 3000 does not exist");
+
 describe("/api/articles", () => {
   test("GET:200 sends an array of articles to the client", () => {
     return request(app)

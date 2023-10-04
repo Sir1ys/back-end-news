@@ -1,18 +1,22 @@
 const express = require("express");
 const { getTopics } = require("./controllers/topics.controller");
 
+
+const { getArticle } = require("./controllers/articles-controller");
+const { getEndpoints } = require("./controllers/api.controller");
+const { getComments } = require("./controllers/comments-controller");
+
 const {
   getArticle,
   getArticles,
 } = require("./controllers/articles-controller");
+
 const {
   handleCustomErrors,
   handlePsqlErrors,
   handleServerErrors,
   handleWrongUrlErrors,
 } = require("./errors");
-
-const { getEndpoints } = require("./controllers/api.controller");
 
 const app = express();
 
@@ -21,6 +25,8 @@ app.get("/api/topics", getTopics);
 app.get("/api/articles/:article_id", getArticle);
 
 app.get("/api", getEndpoints);
+
+app.get("/api/articles/:article_id/comments", getComments);
 
 app.get("/api/articles", getArticles);
 
