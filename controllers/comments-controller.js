@@ -10,5 +10,12 @@ exports.getComments = (req, res, next) => {
 };
 
 exports.postComment = (req, res, next) => {
-  createComment();
+  const commentData = req.body;
+  const { article_id } = req.params;
+
+  createComment(article_id, commentData)
+    .then(({ comment }) => {
+      res.status(201).send({ comment });
+    })
+    .catch((err) => next(err));
 };

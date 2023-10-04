@@ -178,7 +178,7 @@ describe("/api/articles/:article_id/comments", () => {
   // POST REQUESTS TESTING
   test("POST: 201 sends the posted comment for a particular article", () => {
     const commentData = {
-      username: "Sasha",
+      username: "butter_bridge",
       body: "This is a part of our history",
     };
 
@@ -188,13 +188,14 @@ describe("/api/articles/:article_id/comments", () => {
       .expect(201)
       .then(({ body }) => {
         const comment = body.comment;
+
         expect(comment).toEqual(
           expect.objectContaining({
             comment_id: expect.any(Number),
             votes: 0,
             created_at: expect.any(String),
-            author: expect.any(String),
-            body: expect.any(String),
+            author: "butter_bridge",
+            body: "This is a part of our history",
             article_id: 13,
           })
         );
@@ -210,13 +211,59 @@ describe("/api/articles/:article_id/comments", () => {
         expect(body.msg).toBe("Invalid input");
       });
   });
-
+  
   test("GET: 404 when passing id doesn't match any of articles", () => {
     return request(app)
       .get("/api/articles/3000/comments")
       .expect(404)
       .then(({ body }) => {
         expect(body.msg).toBe("Article with id 3000 does not exist");
+      });
+  });
+
+  // POST errors
+  test("POST: 400 when passing id is not valid", () => {
+    const commentData = {
+      username: "butter_bridge",
+      body: "This is a part of our history",
+    };
+
+    return request(app)
+      .post("/api/articles/hello/comments")
+      .send(commentData)
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Invalid input");
+      });
+  });
+
+  test("POST: 404 when passing id doesn't match any of articles", () => {
+    const commentData = {
+      username: "butter_bridge",
+      body: "This is a part of our history",
+    };
+
+    return request(app)
+      .post("/api/articles/3000/comments")
+      .send(commentData)
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Article with id 3000 does not exist");
+      });
+  });
+
+  test("POST: 404 when username doesn't match any of users", () => {
+    const commentData = {
+      username: "Sasha", // there are no users with this username in our database
+      body: "This is a part of our history",
+    };
+
+    return request(app)
+      .post("/api/articles/13/comments")
+      .send(commentData)
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Invalid input");
       });
   });
 });

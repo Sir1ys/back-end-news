@@ -33,9 +33,12 @@ app.get("/api/articles", getArticles);
 
 app.get("/api/articles/:article_id/comments", getComments);
 
+// parse request body as JSON
+app.use(express.json())
+
 app.post("/api/articles/:article_id/comments", postComment);
 
-// //WRONG URL Errors handling
+// WRONG URL Errors handling
 app.all("*", handleWrongUrlErrors);
 
 // PSQL Errors handling
