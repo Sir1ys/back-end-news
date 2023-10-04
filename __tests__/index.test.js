@@ -129,6 +129,21 @@ describe("/api/articles", () => {
         });
       });
   });
+
+  test("GET: 200 sends an array of articles to the client filtered by topic", () => {
+    return request(app)
+      .get("/api/articles?topic=mitch")
+      .expect(200)
+      .then(({ body }) => {
+        const articles = body.articles;
+
+        // checking the array
+        expect(articles.length).toBe(12);
+
+        // checking each article
+        expect(articles).every((article) => article.topic === "mitch");
+      });
+  });
 });
 
 describe("/api/articles/:article_id/comments", () => {
