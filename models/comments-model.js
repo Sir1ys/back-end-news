@@ -16,4 +16,10 @@ exports.fetchComments = (article_id) => {
   );
 };
 
-exports.removeComment = (comment_id) => {};
+exports.removeComment = (comment_id) => {
+  const query = "DELETE FROM comments WHERE comment_id = $1;";
+
+  const values = [comment_id];
+
+  return db.query(query, values);
+};

@@ -10,5 +10,9 @@ exports.getComments = (req, res, next) => {
 };
 
 exports.deleteComment = (req, res, next) => {
-  removeComment();
+  const { comment_id } = req.params;
+
+  removeComment(comment_id)
+    .then(() => res.status(204).send())
+    .catch((err) => next(err));
 };
