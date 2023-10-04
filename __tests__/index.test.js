@@ -139,7 +139,7 @@ describe("/api/articles/:article_id/comments", () => {
   //ERROR TESTING
   test("GET: 400 when passing id is not valid", () => {
     return request(app)
-      .get("/api/articles/1010ww/comments")
+      .get("/api/articles/hello/comments")
       .expect(400)
       .then(({ body }) => {
         expect(body.msg).toBe("Invalid input");
