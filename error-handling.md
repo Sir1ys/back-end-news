@@ -33,7 +33,7 @@ The following is _not_ a comprehensive list! Its purpose is just to get the ball
 
 ### GET `/not-a-route`
 
-- Status: ???
+- `Route` which doesn't exist (e.g. `/dog`)
 
 ---
 
@@ -56,7 +56,9 @@ The following is _not_ a comprehensive list! Its purpose is just to get the ball
 
 ### GET `/api/articles/:article_id/comments`
 
-- ???
+- Bad `article_id` (e.g. `/dog`)
+
+- Well formed `article_id` that doesn't exist in the database (e.g. `/999999`)
 
 ### GET `/api/articles`
 

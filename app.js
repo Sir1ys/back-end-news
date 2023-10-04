@@ -1,9 +1,8 @@
 const express = require("express");
-const { getTopics } = require("./controllers/topics.controller");
+const { getTopics } = require("./controllers/topics-controller");
 
 
-const { getArticle } = require("./controllers/articles-controller");
-const { getEndpoints } = require("./controllers/api.controller");
+const { getEndpoints } = require("./controllers/api-controller");
 const { getComments } = require("./controllers/comments-controller");
 
 const {
@@ -26,9 +25,9 @@ app.get("/api/articles/:article_id", getArticle);
 
 app.get("/api", getEndpoints);
 
-app.get("/api/articles/:article_id/comments", getComments);
-
 app.get("/api/articles", getArticles);
+
+app.get("/api/articles/:article_id/comments", getComments);
 
 // //WRONG URL Errors handling
 app.all("*", handleWrongUrlErrors);
