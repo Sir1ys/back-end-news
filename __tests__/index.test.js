@@ -194,8 +194,8 @@ describe("/api/articles/:article_id/comments", () => {
   });
 });
 
-describe("/api/users", () => {
-  test("GET:200 sends an array of users to the client", () => {
+describe.only("/api/users", () => {
+  test("GET: 200 sends an array of users to the client", () => {
     return request(app)
       .get("/api/users")
       .expect(200)
