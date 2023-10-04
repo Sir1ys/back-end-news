@@ -152,6 +152,41 @@ describe("/api/articles/:article_id/comments", () => {
       .expect(404)
       .then(({ body }) => {
         expect(body.msg).toBe("Article with id 3000 does not exist");
+
+describe("/api/articles", () => {
+  test("GET:200 sends an array of articles to the client", () => {
+    return request(app)
+      .get("/api/articles")
+      .expect(200)
+      .then(({ body }) => {
+        const articles = body.articles;
+
+        // array of articles test
+        expect(articles.length).toBe(13);
+
+        // test whether is sorted by date in descending order
+        expect(articles).toBeSortedBy("created_at", {
+          descending: true,
+        });
+
+        // instance of articles test
+        articles.forEach((article) => {
+          expect(article).toEqual(
+            expect.objectContaining({
+              article_id: expect.any(Number),
+              author: expect.any(String),
+              title: expect.any(String),
+              topic: expect.any(String),
+              created_at: expect.any(String),
+              votes: expect.any(Number),
+              article_img_url: expect.any(String),
+              comment_count: expect.any(String),
+            })
+          );
+
+          // test whether body key is not included
+          expect(article).not.toHaveProperty("body");
+        });
       });
   });
 });
