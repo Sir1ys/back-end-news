@@ -24,3 +24,5 @@ exports.fetchArticles = () => {
 
   return db.query(query).then(({ rows }) => rows);
 };
+
+exports.updateArticle = () => {};
