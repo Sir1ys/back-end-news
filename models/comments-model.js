@@ -15,3 +15,5 @@ exports.fetchComments = (article_id) => {
     })
   );
 };
+
+exports.createComment = () => {};
