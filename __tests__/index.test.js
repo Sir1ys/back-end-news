@@ -10,8 +10,6 @@ beforeEach(() => seed(data));
 afterAll(() => db.end());
 
 describe("/wrong-request", () => {
-  test("GET:404 when request was made to wrong URL", () => {
-  // ERROR TESTING
   test("GET: 404 when request was made to wrong URL", () => {
     return request(app)
       .get("/wrong-request")
@@ -74,8 +72,6 @@ describe("/api/articles/:article_id", () => {
       });
   });
 
-
-  //PATCH testing
   test("PATCH: 200 returns an article object with the votes property updated if passed inc_votes is positive", () => {
     return request(app)
       .patch("/api/articles/1")
@@ -115,7 +111,7 @@ describe("/api/articles/:article_id", () => {
             body: expect.any(String),
             topic: expect.any(String),
             created_at: expect.any(String),
-            votes: 50, //100 is in database
+            votes: 50,
             article_img_url: expect.any(String),
           })
         );
@@ -138,16 +134,12 @@ describe("/api/articles/:article_id", () => {
             body: expect.any(String),
             topic: expect.any(String),
             created_at: expect.any(String),
-            votes: 50, //100 is in database
+            votes: 50,
             article_img_url: expect.any(String),
           })
         );
       });
   });
-
-  //ERROR TESTING
-
-  //GET
 
   test("GET: 404 when passing id doesn't match any of articles", () => {
     return request(app)
@@ -166,8 +158,6 @@ describe("/api/articles/:article_id", () => {
         expect(body.msg).toBe("Invalid input");
       });
   });
-
-  //PATCH
 
   test("PATCH: 404 when passing id doesn't match any of articles", () => {
     return request(app)
@@ -280,7 +270,6 @@ describe("/api/articles", () => {
 });
 
 describe("/api/articles/:article_id/comments", () => {
-  // GET REQUESTS TESTING
   test("GET: 200 sends an array of comments for a single article to the client", () => {
     return request(app)
       .get("/api/articles/3/comments")
@@ -319,8 +308,6 @@ describe("/api/articles/:article_id/comments", () => {
       });
   });
 
-
-  // POST REQUESTS TESTING
   test("POST: 201 sends the posted comment for a particular article", () => {
     const commentData = {
       username: "butter_bridge",
@@ -349,7 +336,7 @@ describe("/api/articles/:article_id/comments", () => {
 
   test("POST: 201 sends the posted comment for a particular article. Also, it should ignore any unnecessary properties on the sent comment object", () => {
     const commentData = {
-      hobbie: "Reading books", // unnecessary property
+      hobbie: "Reading books",
       username: "butter_bridge",
       body: "This is a part of our history",
     };
@@ -374,7 +361,6 @@ describe("/api/articles/:article_id/comments", () => {
       });
   });
 
-  //ERROR TESTING
   test("GET: 400 when passing id is not valid", () => {
     return request(app)
       .get("/api/articles/hello/comments")
@@ -393,7 +379,6 @@ describe("/api/articles/:article_id/comments", () => {
       });
   });
 
-  // POST errors
   test("POST: 400 when passing id is not valid", () => {
     const commentData = {
       username: "butter_bridge",
@@ -440,7 +425,7 @@ describe("/api/articles/:article_id/comments", () => {
 
   test("POST: 404 when username doesn't match any of users", () => {
     const commentData = {
-      username: "Sasha", // there are no users with this username in our database
+      username: "Sasha",
       body: "This is a part of our history",
     };
 
@@ -459,7 +444,6 @@ describe("/api/comments/:comment_id", () => {
     return request(app).delete("/api/comments/3").expect(204);
   });
 
-  //ERROR TESTING
   test("DELETE: 400 when passing id is not valid", () => {
     return request(app)
       .delete("/api/comments/hello")
@@ -487,10 +471,8 @@ describe("/api/users", () => {
       .then(({ body }) => {
         const users = body.users;
 
-        // array of users test
         expect(users.length).toBe(4);
 
-        // instance of user test
         users.forEach((user) => {
           expect(user).toEqual(
             expect.objectContaining({

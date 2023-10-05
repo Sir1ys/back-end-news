@@ -82,24 +82,24 @@
         "votes": 0,
         "article_img_url": "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700"
       }
-    },
-    "DELETE /api/comments/:comment_id": {
-      "description": "delete a comment with particular id",
-      "queries": [],
-      "exampleResponse": "no content"
-    },
-    "GET /api/users": {
-      "description": "serves an array of all users",
-      "queries": [],
-      "exampleResponse": {
-        "users": [
-          {
-            "username": "butter_bridge",
-            "name": "jonny",
-            "avatar_url": "https://www.healthytherapies.com/wp-content/uploads/2016/06/Lime3.jpg"
-          }
-        ]
-      }
+    }
+  },
+  "DELETE /api/comments/:comment_id": {
+    "description": "delete a comment with particular id",
+    "queries": [],
+    "exampleResponse": "no content"
+  },
+  "GET /api/users": {
+    "description": "serves an array of all users",
+    "queries": [],
+    "exampleResponse": {
+      "users": [
+        {
+          "username": "butter_bridge",
+          "name": "jonny",
+          "avatar_url": "https://www.healthytherapies.com/wp-content/uploads/2016/06/Lime3.jpg"
+        }
+      ]
     }
   },
   "GET /api/articles?topic=mitch": {
