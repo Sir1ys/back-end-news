@@ -27,15 +27,6 @@ exports.fetchArticles = () => {
 };
 
 exports.updateArticle = (article_id, articleData) => {
-  const greenList = ["inc_votes"];
-
-  if (!articleData.hasOwnProperty(greenList[0])) {
-    return Promise.reject({
-      msg: "Required parameter is missing.",
-      status: 400,
-    });
-  }
-
   const query = `UPDATE articles SET votes = votes + $1 WHERE article_id = $2 RETURNING *;`;
 
   const values = [articleData.inc_votes, article_id];

@@ -192,7 +192,7 @@ describe("/api/articles/:article_id", () => {
       .send({})
       .expect(400)
       .then(({ body }) => {
-        expect(body.msg).toBe("Required parameter is missing.");
+        expect(body.msg).toBe("Invalid input");
       });
   });
 
