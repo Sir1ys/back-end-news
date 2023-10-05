@@ -10,7 +10,6 @@ beforeEach(() => seed(data));
 afterAll(() => db.end());
 
 describe("/wrong-request", () => {
-  // ERROR TESTING
   test("GET:404 when request was made to wrong URL", () => {
     return request(app)
       .get("/wrong-request")
@@ -73,7 +72,6 @@ describe("/api/articles/:article_id", () => {
       });
   });
 
-  //ERROR TESTING
   test("GET: 404 when passing id doesn't match any of articles", () => {
     return request(app)
       .get("/api/articles/3000")
@@ -101,15 +99,12 @@ describe("/api/articles", () => {
       .then(({ body }) => {
         const articles = body.articles;
 
-        // array of articles test
         expect(articles.length).toBe(13);
 
-        // test whether is sorted by date in descending order
         expect(articles).toBeSortedBy("created_at", {
           descending: true,
         });
 
-        // instance of articles test
         articles.forEach((article) => {
           expect(article).toEqual(
             expect.objectContaining({
@@ -124,7 +119,6 @@ describe("/api/articles", () => {
             })
           );
 
-          // test whether body key is not included
           expect(article).not.toHaveProperty("body");
         });
       });
@@ -137,10 +131,8 @@ describe("/api/articles", () => {
       .then(({ body }) => {
         const articles = body.articles;
 
-        // checking the array
         expect(articles.length).toBe(12);
 
-        // checking each article
         expect(articles.every((article) => article.topic === "mitch")).toBe(
           true
         );
@@ -154,21 +146,17 @@ describe("/api/articles", () => {
       .then(({ body }) => {
         const articles = body.articles;
 
-        // checking the array
         expect(articles.length).toBe(1);
 
-        // checking each article
         expect(articles.every((article) => article.topic === "cats")).toBe(
           true
         );
       });
   });
 
-  //ERROR TESTING
-
   test("GET: 400 when passed topic is invalid", () => {
     return request(app)
-      .get("/api/articles?topic=dogs") //there is no dogs topic 
+      .get("/api/articles?topic=dogs")
       .expect(400)
       .then(({ body }) => {
         expect(body.msg).toBe("Topic which is passed is invalid");
@@ -184,15 +172,12 @@ describe("/api/articles/:article_id/comments", () => {
       .then(({ body }) => {
         const comments = body.comments;
 
-        // checking the length of comments array
         expect(comments.length).toBe(2);
 
-        // checking whether they are sorted by date by default
         expect(comments).toBeSortedBy("created_at", {
           descending: true,
         });
 
-        // checking the instance of comments
         comments.forEach((comment) => {
           expect(comment).toEqual(
             expect.objectContaining({
@@ -214,12 +199,10 @@ describe("/api/articles/:article_id/comments", () => {
       .expect(200)
       .then(({ body }) => {
         const comments = body.comments;
-        // checking the length of comments array
         expect(comments.length).toBe(0);
       });
   });
 
-  //ERROR TESTING
   test("GET: 400 when passing id is not valid", () => {
     return request(app)
       .get("/api/articles/hello/comments")
