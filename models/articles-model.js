@@ -1,4 +1,5 @@
 const db = require("../db/connection");
+const { fetchTopics } = require("./topics-model");
 
 exports.fetchArticle = (article_id) => {
   const query = "SELECT * FROM articles WHERE article_id = $1;";
@@ -14,27 +15,35 @@ exports.fetchArticle = (article_id) => {
 };
 
 exports.fetchArticles = (topic) => {
-  const topicGreenList = ["mitch", "cats", "paper"];
+  return fetchTopics()
+    .then((topics) => {
+      const topicGreenList = [];
 
-  let query = `SELECT articles.author, articles.title, articles.article_id, articles.topic, articles.created_at, articles.votes, articles.article_img_url,
+      topics.forEach((topic) => {
+        topicGreenList.push(topic.slug);
+      });
+
+      let query = `SELECT articles.author, articles.title, articles.article_id, articles.topic, articles.created_at, articles.votes, articles.article_img_url,
   COUNT(comments.comment_id) AS comment_count 
   FROM articles
   LEFT JOIN comments 
   ON articles.article_id = comments.article_id`;
-  const values = [];
+      const values = [];
 
-  if (topic !== undefined && topicGreenList.includes(topic)) {
-    query += ` WHERE articles.topic = $1`;
-    values.push(topic);
-  } else if (topic !== undefined && !topicGreenList.includes(topic)) {
-    return Promise.reject({
-      msg: "Topic which is passed is not found",
-      status: 404,
-    });
-  }
+      if (topic !== undefined && topicGreenList.includes(topic)) {
+        query += ` WHERE articles.topic = $1`;
+        values.push(topic);
+      } else if (topic !== undefined && !topicGreenList.includes(topic)) {
+        return Promise.reject({
+          msg: "Topic which is passed is not found",
+          status: 404,
+        });
+      }
 
-  query += ` GROUP BY articles.article_id
+      query += ` GROUP BY articles.article_id
   ORDER BY articles.created_at DESC`;
 
-  return db.query(query, values).then(({ rows }) => rows);
+      return db.query(query, values);
+    })
+    .then(({ rows }) => rows);
 };
