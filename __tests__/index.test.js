@@ -319,6 +319,15 @@ describe("/api/articles", () => {
         expect(body.msg).toBe("Wrong order query");
       });
   });
+
+  test("GET: 400 when requested to sort by query 'wrong_query'", () => {
+    return request(app)
+      .get("/api/articles?sort_by=wrong_query")
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Wrong sort_by query");
+      });
+  });
 });
 
 describe("/api/articles/:article_id/comments", () => {
