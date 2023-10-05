@@ -55,6 +55,53 @@
       }
     }
   },
+  "POST /api/articles/:article_id/comments": {
+    "description": "serves an instance of comments for particular article",
+    "queries": ["username", "body"],
+    "exampleResponse": {
+      "article": {
+        "comment_id": 1,
+        "votes": "Student SUES Mitch!",
+        "created_at": 1586179020000,
+        "author": "butter_bridge",
+        "body": "Oh, I've got compassion running out of my nose, pal! I'm the Sultan of Sentiment!",
+        "article_id": 9
+      }
+    }
+  },
+  "PATCH /api/articles/:article_id": {
+    "description": "updated an instance of article with the particular id. It updates inc_votes value.",
+    "queries": [],
+    "exampleResponse": {
+      "article": {
+        "title": "Student SUES Mitch!",
+        "topic": "mitch",
+        "author": "rogersop",
+        "body": "We all love Mitch and his wonderful, unique typing style. However, the volume of his typing has ALLEGEDLY burst another students eardrums, and they are now suing for damages",
+        "created_at": "2020-05-06T01:14:00.000Z",
+        "votes": 0,
+        "article_img_url": "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700"
+      }
+    },
+    "DELETE /api/comments/:comment_id": {
+      "description": "delete a comment with particular id",
+      "queries": [],
+      "exampleResponse": "no content"
+    },
+    "GET /api/users": {
+      "description": "serves an array of all users",
+      "queries": [],
+      "exampleResponse": {
+        "users": [
+          {
+            "username": "butter_bridge",
+            "name": "jonny",
+            "avatar_url": "https://www.healthytherapies.com/wp-content/uploads/2016/06/Lime3.jpg"
+          }
+        ]
+      }
+    }
+  },
   "GET /api/articles?topic=mitch": {
     "description": "serves an array of all articles filtered by the topic value specified in the query",
     "queries": ["mitch", "dogs"],
