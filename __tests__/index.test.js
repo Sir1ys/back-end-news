@@ -275,6 +275,19 @@ describe("/api/articles", () => {
       });
   });
 
+  test("GET: 200 sends an array of articles to the client sorting by order, desc by default", () => {
+    return request(app)
+      .get("/api/articles?order=asc")
+      .expect(200)
+      .then(({ body }) => {
+        const articles = body.articles;
+
+        expect(articles).toBeSortedBy("title", {
+          ascending: true,
+        });
+      });
+  });
+
   test("GET: 404 when passed topic is not found", () => {
     return request(app)
       .get("/api/articles?topic=dogs")
