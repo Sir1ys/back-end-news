@@ -72,6 +72,29 @@ describe("/api/articles/:article_id", () => {
       });
   });
 
+  test("GET: 200 sends a single article to the client with comment_count property included", () => {
+    return request(app)
+      .get("/api/articles/4")
+      .expect(200)
+      .then(({ body }) => {
+        const { article } = body;
+
+        expect(article).toEqual(
+          expect.objectContaining({
+            article_id: 4,
+            author: expect.any(String),
+            title: expect.any(String),
+            body: expect.any(String),
+            topic: expect.any(String),
+            created_at: expect.any(String),
+            votes: expect.any(Number),
+            article_img_url: expect.any(String),
+            comment_count: expect.any(Number),
+          })
+        );
+      });
+  });
+
   test("PATCH: 200 returns an article object with the votes property updated if passed inc_votes is positive", () => {
     return request(app)
       .patch("/api/articles/1")
