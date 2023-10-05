@@ -10,6 +10,7 @@ beforeEach(() => seed(data));
 afterAll(() => db.end());
 
 describe("/wrong-request", () => {
+  test("GET:404 when request was made to wrong URL", () => {
   // ERROR TESTING
   test("GET: 404 when request was made to wrong URL", () => {
     return request(app)
@@ -72,6 +73,7 @@ describe("/api/articles/:article_id", () => {
         );
       });
   });
+
 
   //PATCH testing
   test("PATCH: 200 returns an article object with the votes property updated if passed inc_votes is positive", () => {
@@ -146,6 +148,7 @@ describe("/api/articles/:article_id", () => {
   //ERROR TESTING
 
   //GET
+
   test("GET: 404 when passing id doesn't match any of articles", () => {
     return request(app)
       .get("/api/articles/3000")
@@ -215,15 +218,12 @@ describe("/api/articles", () => {
       .then(({ body }) => {
         const articles = body.articles;
 
-        // array of articles test
         expect(articles.length).toBe(13);
 
-        // test whether is sorted by date in descending order
         expect(articles).toBeSortedBy("created_at", {
           descending: true,
         });
 
-        // instance of articles test
         articles.forEach((article) => {
           expect(article).toEqual(
             expect.objectContaining({
@@ -238,9 +238,43 @@ describe("/api/articles", () => {
             })
           );
 
-          // test whether body key is not included
           expect(article).not.toHaveProperty("body");
         });
+      });
+  });
+
+  test("GET: 200 sends an array of articles to the client filtered by topic = mitch", () => {
+    return request(app)
+      .get("/api/articles?topic=mitch")
+      .expect(200)
+      .then(({ body }) => {
+        const articles = body.articles;
+
+        expect(articles.length).toBe(12);
+
+        expect(articles.every((article) => article.topic === "mitch")).toBe(
+          true
+        );
+      });
+  });
+
+  test("GET: 200 sends an empty array of articles to the client filtered by topic = paper, because there are not articles associated with this topic", () => {
+    return request(app)
+      .get("/api/articles?topic=paper")
+      .expect(200)
+      .then(({ body }) => {
+        const articles = body.articles;
+
+        expect(articles.length).toBe(0);
+      });
+  });
+
+  test("GET: 404 when passed topic is not found", () => {
+    return request(app)
+      .get("/api/articles?topic=dogs")
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Topic which is passed is not found");
       });
   });
 });
@@ -254,15 +288,12 @@ describe("/api/articles/:article_id/comments", () => {
       .then(({ body }) => {
         const comments = body.comments;
 
-        // checking the length of comments array
         expect(comments.length).toBe(2);
 
-        // checking whether they are sorted by date by default
         expect(comments).toBeSortedBy("created_at", {
           descending: true,
         });
 
-        // checking the instance of comments
         comments.forEach((comment) => {
           expect(comment).toEqual(
             expect.objectContaining({
@@ -284,10 +315,10 @@ describe("/api/articles/:article_id/comments", () => {
       .expect(200)
       .then(({ body }) => {
         const comments = body.comments;
-        // checking the length of comments array
         expect(comments.length).toBe(0);
       });
   });
+
 
   // POST REQUESTS TESTING
   test("POST: 201 sends the posted comment for a particular article", () => {
