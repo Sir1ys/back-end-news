@@ -81,4 +81,5 @@ The following is _not_ a comprehensive list! Its purpose is just to get the ball
 
 ### DELETE `/api/comments/:comment_id`
 
-- ???
+- Bad `comment_id` (e.g. `/dog`)
+- Well formed `comment_id` that doesn't exist in the database (e.g. `/999999`)

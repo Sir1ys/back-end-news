@@ -1,5 +1,9 @@
 const express = require("express");
 
+const { getEndpoints } = require("./controllers/api-controller");
+
+const { getComments, deleteComment } = require("./controllers/comments-controller");
+
 const { getTopics } = require("./controllers/topics-controller");
 
 const { getEndpoints } = require("./controllers/api-controller");
@@ -8,6 +12,7 @@ const {
   getComments,
   postComment,
 } = require("./controllers/comments-controller");
+
 
 const {
   getArticle,
@@ -40,6 +45,8 @@ app.use(express.json())
 app.post("/api/articles/:article_id/comments", postComment);
 
 app.patch("/api/articles/:article_id", patchArticle);
+
+app.delete("/api/comments/:comment_id", deleteComment);
 
 // WRONG URL Errors handling
 
