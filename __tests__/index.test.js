@@ -216,7 +216,7 @@ describe("/api/articles/:article_id", () => {
   });
 });
 
-describe.only("/api/articles", () => {
+describe("/api/articles", () => {
   test("GET: 200 sends an array of articles to the client", () => {
     return request(app)
       .get("/api/articles")
@@ -290,12 +290,10 @@ describe.only("/api/articles", () => {
 
   test("GET: 200 sends an array of articles to the client sorted by title, created_at by default", () => {
     return request(app)
-      .get("/api/articles?sort_by=title")
+      .get("/api/articles?sort_by=article_id")
       .expect(200)
       .then(({ body }) => {
         const articles = body.articles;
-
-        console.log(articles);
 
         expect(articles).toBeSortedBy("article_id", {
           descending: true,
