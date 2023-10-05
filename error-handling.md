@@ -53,7 +53,13 @@ The following is _not_ a comprehensive list! Its purpose is just to get the ball
 
 ### POST `/api/articles/:article_id/comments`
 
-- ???
+- Bad `article_id` (e.g. `/dog`)
+
+- Well formed `article_id` that doesn't exist in the database (e.g. `/999999`)
+
+- Well formed `username` that doesn't exist in the users database (e.g. `Sasha`)
+
+- Whena required field `body` or `username` is missing in the send object
 
 ### GET `/api/articles/:article_id/comments`
 

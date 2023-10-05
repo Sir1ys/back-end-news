@@ -1,8 +1,13 @@
 const express = require("express");
+
 const { getTopics } = require("./controllers/topics-controller");
 
 const { getEndpoints } = require("./controllers/api-controller");
-const { getComments } = require("./controllers/comments-controller");
+
+const {
+  getComments,
+  postComment,
+} = require("./controllers/comments-controller");
 
 const {
   getArticle,
@@ -29,11 +34,15 @@ app.get("/api/articles", getArticles);
 
 app.get("/api/articles/:article_id/comments", getComments);
 
-app.use(express.json());
+// parse request body as JSON
+app.use(express.json())
+
+app.post("/api/articles/:article_id/comments", postComment);
 
 app.patch("/api/articles/:article_id", patchArticle);
 
-// //WRONG URL Errors handling
+// WRONG URL Errors handling
+
 app.all("*", handleWrongUrlErrors);
 
 // PSQL Errors handling
