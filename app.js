@@ -12,6 +12,7 @@ const {
 const {
   getArticle,
   getArticles,
+  patchArticle,
 } = require("./controllers/articles-controller");
 
 const {
@@ -38,7 +39,10 @@ app.use(express.json())
 
 app.post("/api/articles/:article_id/comments", postComment);
 
+app.patch("/api/articles/:article_id", patchArticle);
+
 // WRONG URL Errors handling
+
 app.all("*", handleWrongUrlErrors);
 
 // PSQL Errors handling

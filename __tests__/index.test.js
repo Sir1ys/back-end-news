@@ -73,7 +73,79 @@ describe("/api/articles/:article_id", () => {
       });
   });
 
+  //PATCH testing
+  test("PATCH: 200 returns an article object with the votes property updated if passed inc_votes is positive", () => {
+    return request(app)
+      .patch("/api/articles/1")
+      .send({ inc_votes: 50 })
+      .expect(200)
+      .then(({ body }) => {
+        const { article } = body;
+
+        expect(article).toEqual(
+          expect.objectContaining({
+            article_id: 1,
+            author: expect.any(String),
+            title: expect.any(String),
+            body: expect.any(String),
+            topic: expect.any(String),
+            created_at: expect.any(String),
+            votes: 150,
+            article_img_url: expect.any(String),
+          })
+        );
+      });
+  });
+
+  test("PATCH: 200 returns an article object with the votes property updated if passed inc_votes is negative", () => {
+    return request(app)
+      .patch("/api/articles/1")
+      .send({ inc_votes: -50 })
+      .expect(200)
+      .then(({ body }) => {
+        const { article } = body;
+
+        expect(article).toEqual(
+          expect.objectContaining({
+            article_id: 1,
+            author: expect.any(String),
+            title: expect.any(String),
+            body: expect.any(String),
+            topic: expect.any(String),
+            created_at: expect.any(String),
+            votes: 50, //100 is in database
+            article_img_url: expect.any(String),
+          })
+        );
+      });
+  });
+
+  test("PATCH: 200 returns an article object with the votes property updated. It should ignore any unnecessary properties in the sent object", () => {
+    return request(app)
+      .patch("/api/articles/1")
+      .send({ inc_votes: -50, hobbie: "cat" })
+      .expect(200)
+      .then(({ body }) => {
+        const { article } = body;
+
+        expect(article).toEqual(
+          expect.objectContaining({
+            article_id: 1,
+            author: expect.any(String),
+            title: expect.any(String),
+            body: expect.any(String),
+            topic: expect.any(String),
+            created_at: expect.any(String),
+            votes: 50, //100 is in database
+            article_img_url: expect.any(String),
+          })
+        );
+      });
+  });
+
   //ERROR TESTING
+
+  //GET
   test("GET: 404 when passing id doesn't match any of articles", () => {
     return request(app)
       .get("/api/articles/3000")
@@ -86,6 +158,48 @@ describe("/api/articles/:article_id", () => {
   test("GET: 400 when passing id is not valid", () => {
     return request(app)
       .get("/api/articles/sw20")
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Invalid input");
+      });
+  });
+
+  //PATCH
+
+  test("PATCH: 404 when passing id doesn't match any of articles", () => {
+    return request(app)
+      .patch("/api/articles/112")
+      .send({ inc_votes: -50 })
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Article with id 112 does not exist");
+      });
+  });
+
+  test("PATCH: 400 when passing id is not valid", () => {
+    return request(app)
+      .patch("/api/articles/hello")
+      .send({ inc_votes: -50 })
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Invalid input");
+      });
+  });
+
+  test("PATCH: 400 when required parameter is missing", () => {
+    return request(app)
+      .patch("/api/articles/1")
+      .send({})
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Invalid input");
+      });
+  });
+
+  test("PATCH: 400 when required parameter is invalid", () => {
+    return request(app)
+      .patch("/api/articles/1")
+      .send({ inc_votes: "cat" })
       .expect(400)
       .then(({ body }) => {
         expect(body.msg).toBe("Invalid input");

@@ -2,6 +2,7 @@ const db = require("../db/connection");
 
 exports.fetchArticle = (article_id) => {
   const query = "SELECT * FROM articles WHERE article_id = $1;";
+
   return db.query(query, [article_id]).then(({ rows }) => {
     if (rows.length === 0) {
       return Promise.reject({
@@ -23,4 +24,16 @@ exports.fetchArticles = () => {
   ORDER BY articles.created_at DESC`;
 
   return db.query(query).then(({ rows }) => rows);
+};
+
+exports.updateArticle = (article_id, articleData) => {
+  const query = `UPDATE articles SET votes = votes + $1 WHERE article_id = $2 RETURNING *;`;
+
+  const values = [articleData.inc_votes, article_id];
+
+  return this.fetchArticle(article_id).then(() =>
+    db.query(query, values).then(({ rows }) => {
+      return { article: rows[0] };
+    })
+  );
 };

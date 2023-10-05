@@ -55,6 +55,20 @@
       }
     }
   },
+
+  "PATCH /api/articles/:article_id": {
+    "description": "updated an instance of article with the particular id. It updates inc_votes value.",
+    "queries": [],
+    "exampleResponse": {
+      "article": {
+        "title": "Student SUES Mitch!",
+        "topic": "mitch",
+        "author": "rogersop",
+        "body": "We all love Mitch and his wonderful, unique typing style. However, the volume of his typing has ALLEGEDLY burst another students eardrums, and they are now suing for damages",
+        "created_at": "2020-05-06T01:14:00.000Z",
+        "votes": 0,
+        "article_img_url": "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700"
+
   "POST /api/articles/:article_id/comments": {
     "description": "serves an instance of comments for particular article",
     "queries": ["username", "body"],
@@ -66,6 +80,7 @@
         "author": "butter_bridge",
         "body": "Oh, I've got compassion running out of my nose, pal! I'm the Sultan of Sentiment!",
         "article_id": 9
+
       }
     }
   }
