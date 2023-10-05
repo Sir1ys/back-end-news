@@ -72,6 +72,22 @@ describe("/api/articles/:article_id", () => {
       });
   });
 
+  test("GET: 200 sends a single article to the client with comment_count property included", () => {
+    return request(app)
+      .get("/api/articles/1")
+      .expect(200)
+      .then(({ body }) => {
+        const { article } = body;
+
+        expect(article).toEqual(
+          expect.objectContaining({
+            article_id: 1,
+            comment_count: "11",
+          })
+        );
+      });
+  });
+
   test("PATCH: 200 returns an article object with the votes property updated if passed inc_votes is positive", () => {
     return request(app)
       .patch("/api/articles/1")
