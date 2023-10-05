@@ -139,7 +139,7 @@ describe("/api/articles", () => {
       });
   });
 
-  test.only("GET: 200 sends an empty array of articles to the client filtered by topic = paper, because there are not articles associated with this topic", () => {
+  test("GET: 200 sends an empty array of articles to the client filtered by topic = paper, because there are not articles associated with this topic", () => {
     return request(app)
       .get("/api/articles?topic=paper")
       .expect(200)
