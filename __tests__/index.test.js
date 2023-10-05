@@ -288,6 +288,22 @@ describe.only("/api/articles", () => {
       });
   });
 
+  test("GET: 200 sends an array of articles to the client sorted by title, created_at by default", () => {
+    return request(app)
+      .get("/api/articles?sort_by=title")
+      .expect(200)
+      .then(({ body }) => {
+        const articles = body.articles;
+
+        console.log(articles);
+
+        expect(articles).toBeSortedBy("article_id", {
+          descending: true,
+          coerce: true,
+        });
+      });
+  });
+
   test("GET: 404 when passed topic is not found", () => {
     return request(app)
       .get("/api/articles?topic=dogs")
