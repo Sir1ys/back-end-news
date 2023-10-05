@@ -21,10 +21,15 @@ exports.fetchArticle = (article_id) => {
   });
 };
 
-exports.fetchArticles = (topic) => {
+exports.fetchArticles = (topic, order = "desc") => {
   return fetchTopics()
     .then((topics) => {
       const topicGreenList = [];
+      const orderGreenList = ["asc", "desc"];
+
+      if (!orderGreenList.includes(order)) {
+        return Promise.reject({ msg: "Wrong order query", status: 400 });
+      }
 
       topics.forEach((topic) => {
         topicGreenList.push(topic.slug);
@@ -35,6 +40,7 @@ exports.fetchArticles = (topic) => {
   FROM articles
   LEFT JOIN comments 
   ON articles.article_id = comments.article_id`;
+
       const values = [];
 
       if (topic !== undefined && topicGreenList.includes(topic)) {
@@ -48,7 +54,7 @@ exports.fetchArticles = (topic) => {
       }
 
       query += ` GROUP BY articles.article_id
-  ORDER BY articles.created_at DESC`;
+  ORDER BY articles.created_at ${order}`;
 
       return db.query(query, values);
     })
