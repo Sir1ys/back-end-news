@@ -47,4 +47,6 @@ PGDATABASE=database_name_here
 
 6. If you want to a json representation of all the available endpoints of the api make a GET reqeust to /api route.
 
+7. The minimum versions of Node is 18.13.0 and Postgres - 8.11.3 are needed to run this project.
+
 The development environment should now be set up. Happy hacking! 👾
