@@ -296,6 +296,15 @@ describe.only("/api/articles", () => {
         expect(body.msg).toBe("Topic which is passed is not found");
       });
   });
+
+  test("GET: 400 when requested to order by query 'wrong_query'", () => {
+    return request(app)
+      .get("/api/articles?order=wrong_query")
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Wrong order query");
+      });
+  });
 });
 
 describe("/api/articles/:article_id/comments", () => {
