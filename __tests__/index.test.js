@@ -448,7 +448,7 @@ describe("/api/comments/:comment_id", () => {
   });
 });
 
-describe.only("/api/users", () => {
+describe("/api/users", () => {
   test("GET: 200 sends an array of users to the client", () => {
     return request(app)
       .get("/api/users")
