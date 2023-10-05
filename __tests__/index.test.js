@@ -139,6 +139,17 @@ describe("/api/articles", () => {
       });
   });
 
+  test.only("GET: 200 sends an empty array of articles to the client filtered by topic = paper, because there are not articles associated with this topic", () => {
+    return request(app)
+      .get("/api/articles?topic=paper")
+      .expect(200)
+      .then(({ body }) => {
+        const articles = body.articles;
+
+        expect(articles.length).toBe(0);
+      });
+  });
+
   test("GET: 404 when passed topic is not found", () => {
     return request(app)
       .get("/api/articles?topic=dogs")
