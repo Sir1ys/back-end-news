@@ -28,8 +28,8 @@ exports.fetchArticles = (topic) => {
     values.push(topic);
   } else if (topic !== undefined && !topicGreenList.includes(topic)) {
     return Promise.reject({
-      msg: "Topic which is passed is invalid",
-      status: 400,
+      msg: "Topic which is passed is not found",
+      status: 404,
     });
   }
 

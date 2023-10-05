@@ -154,12 +154,12 @@ describe("/api/articles", () => {
       });
   });
 
-  test("GET: 400 when passed topic is invalid", () => {
+  test("GET: 404 when passed topic is not found", () => {
     return request(app)
       .get("/api/articles?topic=dogs")
-      .expect(400)
+      .expect(404)
       .then(({ body }) => {
-        expect(body.msg).toBe("Topic which is passed is invalid");
+        expect(body.msg).toBe("Topic which is passed is not found");
       });
   });
 });
