@@ -24,12 +24,15 @@ const {
 } = require("./errors");
 
 const { getUsers } = require("./controllers/users-controller");
+const apiRouter = require("./routers/api-router");
 
 const app = express();
 
-app.get("/api/topics", getTopics);
+app.use("/api", apiRouter);
 
-app.get("/api", getEndpoints);
+// app.get("/api/topics", getTopics);
+
+// app.get("/api", getEndpoints);
 
 app.get("/api/articles/:article_id", getArticle);
 
@@ -47,7 +50,6 @@ app.patch("/api/articles/:article_id", patchArticle);
 app.delete("/api/comments/:comment_id", deleteComment);
 
 app.get("/api/users", getUsers);
-
 
 // WRONG URL Errors handling
 
