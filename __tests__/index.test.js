@@ -90,7 +90,7 @@ describe("/api/articles/:article_id", () => {
             body: expect.any(String),
             topic: expect.any(String),
             created_at: expect.any(String),
-            votes: 150, //100 is in database
+            votes: 150,
             article_img_url: expect.any(String),
           })
         );
