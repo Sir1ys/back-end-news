@@ -74,14 +74,14 @@ describe("/api/articles/:article_id", () => {
 
   test("GET: 200 sends a single article to the client with comment_count property included", () => {
     return request(app)
-      .get("/api/articles/4")
+      .get("/api/articles/1")
       .expect(200)
       .then(({ body }) => {
         const { article } = body;
 
         expect(article).toEqual(
           expect.objectContaining({
-            article_id: 4,
+            article_id: 1,
             author: expect.any(String),
             title: expect.any(String),
             body: expect.any(String),
@@ -89,7 +89,7 @@ describe("/api/articles/:article_id", () => {
             created_at: expect.any(String),
             votes: expect.any(Number),
             article_img_url: expect.any(String),
-            comment_count: expect.any(Number),
+            comment_count: "11",
           })
         );
       });
