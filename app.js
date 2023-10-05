@@ -22,6 +22,7 @@ const {
   handleServerErrors,
   handleWrongUrlErrors,
 } = require("./errors");
+const { getUsers } = require("./controllers/users-controller");
 
 const app = express();
 
@@ -43,6 +44,9 @@ app.post("/api/articles/:article_id/comments", postComment);
 app.patch("/api/articles/:article_id", patchArticle);
 
 app.delete("/api/comments/:comment_id", deleteComment);
+
+app.get("/api/users", getUsers);
+
 
 // WRONG URL Errors handling
 

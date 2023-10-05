@@ -447,3 +447,28 @@ describe("/api/comments/:comment_id", () => {
       });
   });
 });
+
+describe.only("/api/users", () => {
+  test("GET: 200 sends an array of users to the client", () => {
+    return request(app)
+      .get("/api/users")
+      .expect(200)
+      .then(({ body }) => {
+        const users = body.users;
+
+        // array of users test
+        expect(users.length).toBe(4);
+
+        // instance of user test
+        users.forEach((user) => {
+          expect(user).toEqual(
+            expect.objectContaining({
+              username: expect.any(String),
+              name: expect.any(String),
+              avatar_url: expect.any(String),
+            })
+          );
+        });
+      });
+  });
+});
