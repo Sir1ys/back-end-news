@@ -21,20 +21,38 @@ exports.fetchArticle = (article_id) => {
   });
 };
 
-exports.fetchArticles = (topic) => {
+exports.fetchArticles = (topic, order = "desc", sort_by = "created_at") => {
   return fetchTopics()
     .then((topics) => {
       const topicGreenList = [];
+      const orderGreenList = ["asc", "desc"];
+
+      if (!orderGreenList.includes(order)) {
+        return Promise.reject({ msg: "Wrong order query", status: 400 });
+      }
 
       topics.forEach((topic) => {
         topicGreenList.push(topic.slug);
       });
 
+      const fetchArticle = this.fetchArticle(1);
+
+      return Promise.all([topicGreenList, fetchArticle]);
+    })
+    .then((data) => {
+      const topicGreenList = data[0];
+      const sort_byGreenList = Object.keys(data[1].article);
+
+      if (!sort_byGreenList.includes(sort_by)) {
+        return Promise.reject({ msg: "Wrong sort_by query", status: 400 });
+      }
+
       let query = `SELECT articles.author, articles.title, articles.article_id, articles.topic, articles.created_at, articles.votes, articles.article_img_url,
-  COUNT(comments.comment_id) AS comment_count 
-  FROM articles
-  LEFT JOIN comments 
-  ON articles.article_id = comments.article_id`;
+      COUNT(comments.comment_id) AS comment_count
+      FROM articles
+      LEFT JOIN comments
+      ON articles.article_id = comments.article_id`;
+
       const values = [];
 
       if (topic !== undefined && topicGreenList.includes(topic)) {
@@ -46,9 +64,8 @@ exports.fetchArticles = (topic) => {
           status: 404,
         });
       }
-
       query += ` GROUP BY articles.article_id
-  ORDER BY articles.created_at DESC`;
+ORDER BY articles.${sort_by} ${order}`;
 
       return db.query(query, values);
     })
