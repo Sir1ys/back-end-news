@@ -70,7 +70,7 @@
     }
   },
   "PATCH /api/articles/:article_id": {
-    "description": "updated an instance of article with the particular id. It updates inc_votes value.",
+    "description": "updates an instance of article with the particular id. It updates inc_votes value.",
     "queries": [],
     "exampleResponse": {
       "article": {
@@ -85,7 +85,7 @@
     }
   },
   "DELETE /api/comments/:comment_id": {
-    "description": "delete a comment with particular id",
+    "description": "deletes a comment with particular id",
     "queries": [],
     "exampleResponse": "no content"
   },
@@ -130,7 +130,7 @@
     }
   },
   "PATCH /api/comments/:comment_id": {
-    "description": "updated an instance of comment with the particular id. It updates inc_votes value.",
+    "description": "updates an instance of comment with the particular id. It updates inc_votes value.",
     "queries": [],
     "exampleResponse": {
       "comment": {
@@ -140,6 +140,21 @@
         "author": "butter_bridge",
         "article_id": 9,
         "created_at": 1586179020000
+      }
+    }
+  },
+  "POST /api/articles": {
+    "description": "creates an instance of article",
+    "queries": [],
+    "exampleResponse": {
+      "article": {
+        "title": "Student SUES Mitch!",
+        "topic": "mitch",
+        "author": "rogersop",
+        "body": "We all love Mitch and his wonderful, unique typing style. However, the volume of his typing has ALLEGEDLY burst another students eardrums, and they are now suing for damages",
+        "created_at": "2020-05-06T01:14:00.000Z",
+        "votes": 0,
+        "article_img_url": "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700"
       }
     }
   }
