@@ -83,3 +83,5 @@ exports.updateArticle = (article_id, articleData) => {
     })
   );
 };
+
+exports.createArticle = () => {};
