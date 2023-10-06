@@ -90,3 +90,11 @@ The following is _not_ a comprehensive list! Its purpose is just to get the ball
 ### GET `/api/users/:username`
 
 - Well formed `username` that doesn't exist in the database (e.g. `/sir1ys`)
+
+### POST `/api/articles`
+
+- When one of the required fields is missing in the sent object (e.g. `topic`)
+
+- Well formed `topic` that doesn't exist in the topics database (e.g. `halloween`)
+
+- Well formed `author` that doesn't exist in the users database (e.g. `Sasha`)
