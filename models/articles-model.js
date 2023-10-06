@@ -1,5 +1,6 @@
 const db = require("../db/connection");
 const { fetchTopics } = require("./topics-model");
+const { fetchUsers } = require("./users-model");
 
 exports.fetchArticle = (article_id) => {
   const query = `SELECT articles.author, articles.title, articles.article_id, articles.topic, articles.created_at, articles.votes, articles.article_img_url, articles.body,
@@ -82,4 +83,63 @@ exports.updateArticle = (article_id, articleData) => {
       return { article: rows[0] };
     })
   );
+};
+
+exports.createArticle = (articleData) => {
+  const requiredProps = ["title", "topic", "author", "body"];
+
+  const passedProps = Object.keys(articleData);
+
+  const missingProps = requiredProps.filter(
+    (prop) => !passedProps.includes(prop)
+  );
+
+  if (missingProps.length !== 0) {
+    return Promise.reject({
+      msg: `Required field ${missingProps.join(" ")} is missing`,
+      status: 400,
+    });
+  }
+
+  const { title, topic, author, body, url } = articleData;
+
+  return fetchTopics()
+    .then((topics) => {
+      const topicsGreenList = topics.map((topic) => topic.slug);
+
+      if (!topicsGreenList.includes(topic)) {
+        return Promise.reject({
+          msg: "Topic which is passed is not found",
+          status: 404,
+        });
+      }
+
+      return fetchUsers();
+    })
+    .then(({ users }) => {
+      const authorGreenList = users.map((user) => user.username);
+
+      if (!authorGreenList.includes(author)) {
+        return Promise.reject({
+          msg: "Author which is passed is not found",
+          status: 404,
+        });
+      }
+      let query =
+        "INSERT INTO articles (title, topic, author, body) VALUES ($1, $2, $3, $4) RETURNING article_id;";
+
+      const values = [title, topic, author, body];
+
+      if (url !== undefined) {
+        query =
+          "INSERT INTO articles (title, topic, author, body, article_img_url) VALUES ($1, $2, $3, $4, $5) RETURNING article_id;";
+
+        values.push(url);
+      }
+
+      return db.query(query, values);
+    })
+    .then(({ rows }) => {
+      return this.fetchArticle(rows[0].article_id);
+    });
 };
