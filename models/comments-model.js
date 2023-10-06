@@ -49,3 +49,5 @@ exports.removeComment = (comment_id) => {
     }
   });
 };
+
+exports.updateComment = () => {};

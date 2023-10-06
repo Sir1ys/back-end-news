@@ -547,7 +547,7 @@ describe("/api/users", () => {
   });
 });
 
-describe.only("/api/users/:username", () => {
+describe("/api/users/:username", () => {
   test("GET: 200 sends an object of particular user to the client", () => {
     return request(app)
       .get("/api/users/butter_bridge")
