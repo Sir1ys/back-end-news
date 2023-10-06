@@ -565,4 +565,14 @@ describe.only("/api/users/:username", () => {
         });
       });
   });
+
+  test("GET: 404 when user with the username doesn't exist", () => {
+
+    return request(app)
+      .get("/api/users/sir1ys")
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("User with sir1ys username doesn't exist");
+      });
+  });
 });

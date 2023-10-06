@@ -22,7 +22,7 @@ exports.fetchUser = (username) => {
       if (!namesGreenList.includes(username)) {
         return Promise.reject({
           msg: `User with ${username} username doesn't exist`,
-          status: 400,
+          status: 404,
         });
       }
 
