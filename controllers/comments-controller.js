@@ -34,5 +34,12 @@ exports.deleteComment = (req, res, next) => {
 };
 
 exports.patchComment = (req, res, next) => {
-  updateComment();
+  const { comment_id } = req.params;
+  const commentData = req.body;
+
+  updateComment(comment_id, commentData)
+    .then(({ comment }) => {
+      res.status(200).send({ comment });
+    })
+    .catch((err) => next(err));
 };
