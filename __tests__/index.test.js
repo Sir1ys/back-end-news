@@ -302,6 +302,39 @@ describe("/api/articles", () => {
       });
   });
 
+  test("POST: 201 returns a new instance of the article. Also, it should ignore any unnecessary properties on the sent article object", () => {
+    const articleData = {
+      hobbie: "Reading books",
+      author: "butter_bridge",
+      title: "Welcome to Northcoders",
+      body: "This is a wonderful bootcamp",
+      topic: "paper",
+      url: "https://images.pexels.com/photos/11035380/pexels-photo-11035380.jpeg?w=700&h=700",
+    };
+
+    return request(app)
+      .post("/api/articles")
+      .send(articleData)
+      .expect(201)
+      .then(({ body }) => {
+        const article = body.article;
+
+        expect(article).toEqual(
+          expect.objectContaining({
+            comment_count: expect.any(Number),
+            votes: 0,
+            created_at: expect.any(String),
+            article_id: expect.any(Number),
+            author: "butter_bridge",
+            title: "Welcome to Northcoders",
+            body: "This is a wonderful bootcamp",
+            topic: "paper",
+            url: "https://images.pexels.com/photos/11035380/pexels-photo-11035380.jpeg?w=700&h=700",
+          })
+        );
+      });
+  });
+
   test("GET: 404 when passed topic is not found", () => {
     return request(app)
       .get("/api/articles?topic=dogs")
