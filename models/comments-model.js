@@ -51,30 +51,17 @@ exports.removeComment = (comment_id) => {
 };
 
 exports.updateComment = (comment_id, commentData) => {
-  const commentsQuery = "SELECT * FROM comments;";
-
   const query = `UPDATE comments SET votes = votes + $1 WHERE comment_id = $2 RETURNING *;`;
 
   const values = [commentData.inc_votes, comment_id];
 
-  return db
-    .query(commentsQuery)
-    .then(({ rows }) => {
-      const commentsGreenList = rows.map((comment) => comment.comment_id);
-
-      return commentsGreenList;
-    })
-    .then((commentsGreenList) => {
-      if (!commentsGreenList.includes(+comment_id)) {
-        return Promise.reject({
-          msg: `Comment with id ${comment_id} does not exist`,
-          status: 404,
-        });
-      }
-
-      return db.query(query, values);
-    })
-    .then(({ rows }) => {
-      return { comment: rows[0] };
-    });
+  return db.query(query, values).then(({ rows }) => {
+    if (rows.length === 0) {
+      return Promise.reject({
+        msg: `Comment with id ${comment_id} does not exist`,
+        status: 404,
+      });
+    }
+    return { comment: rows[0] };
+  });
 };

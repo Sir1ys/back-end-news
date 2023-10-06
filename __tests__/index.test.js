@@ -505,7 +505,7 @@ describe("/api/comments/:comment_id", () => {
     return request(app).delete("/api/comments/3").expect(204);
   });
 
-  test.only("PATCH: 200 returns an comment object with the votes property updated. It should ignore any unnecessary properties in the sent object", () => {
+  test("PATCH: 200 returns an comment object with the votes property updated. It should ignore any unnecessary properties in the sent object", () => {
     return request(app)
       .patch("/api/comments/1")
       .send({ inc_votes: 50, hobbie: "cat" })
@@ -541,6 +541,26 @@ describe("/api/comments/:comment_id", () => {
       .expect(404)
       .then(({ body }) => {
         expect(body.msg).toBe("Comment with id 4000 does not exist");
+      });
+  });
+
+  test("PATCH: 400 when passing id is not valid", () => {
+    return request(app)
+      .patch("/api/comments/hello")
+      .send({ inc_votes: 50, hobbie: "cat" })
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Invalid input");
+      });
+  });
+
+  test("PATCH: 404 when passing id doesn't match any of comments", () => {
+    return request(app)
+      .patch("/api/comments/3000")
+      .send({ inc_votes: 50, hobbie: "cat" })
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Comment with id 3000 does not exist");
       });
   });
 });
