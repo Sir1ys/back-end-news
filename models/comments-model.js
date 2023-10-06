@@ -49,3 +49,19 @@ exports.removeComment = (comment_id) => {
     }
   });
 };
+
+exports.updateComment = (comment_id, commentData) => {
+  const query = `UPDATE comments SET votes = votes + $1 WHERE comment_id = $2 RETURNING *;`;
+
+  const values = [commentData.inc_votes, comment_id];
+
+  return db.query(query, values).then(({ rows }) => {
+    if (rows.length === 0) {
+      return Promise.reject({
+        msg: `Comment with id ${comment_id} does not exist`,
+        status: 404,
+      });
+    }
+    return { comment: rows[0] };
+  });
+};
