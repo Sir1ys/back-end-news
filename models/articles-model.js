@@ -22,7 +22,13 @@ exports.fetchArticle = (article_id) => {
   });
 };
 
-exports.fetchArticles = (topic, order = "desc", sort_by = "created_at") => {
+exports.fetchArticles = (
+  topic,
+  order = "desc",
+  sort_by = "created_at",
+  limit = 10,
+  p
+) => {
   return fetchTopics()
     .then((topics) => {
       const topicGreenList = [];
@@ -68,9 +74,23 @@ exports.fetchArticles = (topic, order = "desc", sort_by = "created_at") => {
       query += ` GROUP BY articles.article_id
 ORDER BY articles.${sort_by} ${order}`;
 
+      if (p) {
+        query += ` LIMIT ${limit} OFFSET ${p * limit}`;
+      }
+
       return db.query(query, values);
     })
-    .then(({ rows }) => rows);
+    .then(({ rows }) => {
+      if (p === undefined) {
+        return {articles: rows};
+      }
+
+      const total_count = this.fetchArticles();
+
+      return Promise.all([total_count, rows]).then((values) => {
+        return { total_count: values[0].articles.length, articles: values[1] };
+      });
+    });
 };
 
 exports.updateArticle = (article_id, articleData) => {
