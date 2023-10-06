@@ -77,7 +77,10 @@ The following is _not_ a comprehensive list! Its purpose is just to get the ball
 
 ### PATCH `/api/comments/:comment_id`
 
-- ???
+- Bad `comment_id` (e.g. `/dog`)
+- Well formed `comment_id` that doesn't exist in the database (e.g. `/999999`)
+- Invalid `inc_votes` (e.g. `{ inc_votes : "cat" }`)
+- When a required field `inc_votes` is missing in the send object
 
 ### DELETE `/api/comments/:comment_id`
 
