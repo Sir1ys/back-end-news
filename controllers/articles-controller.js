@@ -15,11 +15,11 @@ exports.getArticle = (req, res, next) => {
 };
 
 exports.getArticles = (req, res, next) => {
-  const { topic, order, sort_by } = req.query;
+  const { topic, order, sort_by, limit, p } = req.query;
 
-  fetchArticles(topic, order, sort_by)
-    .then((articles) => {
-      res.status(200).send({ articles });
+  fetchArticles(topic, order, sort_by, limit, p)
+    .then(({ total_count, articles }) => {
+      res.status(200).send({ total_count, articles });
     })
     .catch((err) => next(err));
 };

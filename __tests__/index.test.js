@@ -336,6 +336,32 @@ describe("/api/articles", () => {
       });
   });
 
+  test("GET: 200 sends an array of the articles paginated according to the above inputs if just p parameter is passed", () => {
+    return request(app)
+      .get("/api/articles?p=1")
+      .expect(200)
+      .then(({ body }) => {
+        const articles = body.articles;
+        const total_count = body.total_count;
+
+        expect(articles.length).toBe(3);
+        expect(total_count).toBe(13);
+      });
+  });
+
+  test("GET: 200 sends an array of the articles paginated according to the above inputs if limit and p parameters are passed", () => {
+    return request(app)
+      .get("/api/articles?p=1&limit=5")
+      .expect(200)
+      .then(({ body }) => {
+        const articles = body.articles;
+        const total_count = body.total_count;
+
+        expect(articles.length).toBe(5);
+        expect(total_count).toBe(13);
+      });
+  });
+
   test("GET: 404 when passed topic is not found", () => {
     return request(app)
       .get("/api/articles?topic=dogs")
