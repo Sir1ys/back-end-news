@@ -505,6 +505,27 @@ describe("/api/comments/:comment_id", () => {
     return request(app).delete("/api/comments/3").expect(204);
   });
 
+  test("PATCH: 200 returns an comment object with the votes property updated. It should ignore any unnecessary properties in the sent object", () => {
+    return request(app)
+      .patch("/api/comments/1")
+      .send({ inc_votes: 50, hobbie: "cat" })
+      .expect(200)
+      .then(({ body }) => {
+        const { comment } = body;
+
+        expect(comment).toEqual(
+          expect.objectContaining({
+            comment_id: 1,
+            body: "Oh, I've got compassion running out of my nose, pal! I'm the Sultan of Sentiment!",
+            votes: 66,
+            author: "butter_bridge",
+            article_id: 9,
+            created_at: 1586179020000,
+          })
+        );
+      });
+  });
+
   test("DELETE: 400 when passing id is not valid", () => {
     return request(app)
       .delete("/api/comments/hello")
@@ -567,7 +588,6 @@ describe("/api/users/:username", () => {
   });
 
   test("GET: 404 when user with the username doesn't exist", () => {
-
     return request(app)
       .get("/api/users/sir1ys")
       .expect(404)
