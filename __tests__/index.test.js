@@ -302,7 +302,7 @@ describe("/api/articles", () => {
       });
   });
 
-  test.only("POST: 201 returns a new instance of the article. Also, it should ignore any unnecessary properties on the sent article object", () => {
+  test("POST: 201 returns a new instance of the article. Also, it should ignore any unnecessary properties on the sent article object", () => {
     const articleData = {
       hobbie: "Reading books",
       author: "butter_bridge",
@@ -319,7 +319,6 @@ describe("/api/articles", () => {
       .then(({ body }) => {
         const article = body.article;
 
-        console.log(article);
         expect(article).toEqual(
           expect.objectContaining({
             comment_count: expect.any(String),
@@ -330,7 +329,8 @@ describe("/api/articles", () => {
             title: "Welcome to Northcoders",
             body: "This is a wonderful bootcamp",
             topic: "paper",
-            article_img_url: "https://images.pexels.com/photos/11035380/pexels-photo-11035380.jpeg?w=700&h=700",
+            article_img_url:
+              "https://images.pexels.com/photos/11035380/pexels-photo-11035380.jpeg?w=700&h=700",
           })
         );
       });
@@ -360,6 +360,62 @@ describe("/api/articles", () => {
       .expect(400)
       .then(({ body }) => {
         expect(body.msg).toBe("Wrong sort_by query");
+      });
+  });
+
+  test("POST: 400 when reqired field is missing'", () => {
+    const articleData = {
+      hobbie: "Reading books",
+      author: "butter_bridge",
+      title: "Welcome to Northcoders",
+      body: "This is a wonderful bootcamp",
+      url: "https://images.pexels.com/photos/11035380/pexels-photo-11035380.jpeg?w=700&h=700",
+    };
+
+    return request(app)
+      .post("/api/articles")
+      .send(articleData)
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Required field topic is missing");
+      });
+  });
+
+  test("POST: 404 when reqired field (topic) is not found in our topics database'", () => {
+    const articleData = {
+      hobbie: "Reading books",
+      author: "butter_bridge",
+      title: "Welcome to Northcoders",
+      topic: "Helloween",
+      body: "This is a wonderful bootcamp",
+      url: "https://images.pexels.com/photos/11035380/pexels-photo-11035380.jpeg?w=700&h=700",
+    };
+
+    return request(app)
+      .post("/api/articles")
+      .send(articleData)
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Topic which is passed is not found");
+      });
+  });
+
+  test("POST: 404 when reqired field (author) is not found in our users database'", () => {
+    const articleData = {
+      hobbie: "Reading books",
+      author: "sasha",
+      title: "Welcome to Northcoders",
+      topic: "paper",
+      body: "This is a wonderful bootcamp",
+      url: "https://images.pexels.com/photos/11035380/pexels-photo-11035380.jpeg?w=700&h=700",
+    };
+
+    return request(app)
+      .post("/api/articles")
+      .send(articleData)
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Author which is passed is not found");
       });
   });
 });
