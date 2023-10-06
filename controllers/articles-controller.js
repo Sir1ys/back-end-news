@@ -36,5 +36,11 @@ exports.patchArticle = (req, res, next) => {
 };
 
 exports.postArticle = (req, res, next) => {
-  createArticle();
+  const articleData = req.body;
+
+  createArticle(articleData)
+    .then(({ article }) => {
+      res.status(201).send({ article });
+    })
+    .catch((err) => next(err));
 };
