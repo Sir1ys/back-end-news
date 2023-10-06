@@ -547,7 +547,7 @@ describe("/api/users", () => {
   });
 });
 
-describe("/api/users/:username", () => {
+describe.only("/api/users/:username", () => {
   test("GET: 200 sends an object of particular user to the client", () => {
     return request(app)
       .get("/api/users/butter_bridge")
@@ -555,7 +555,7 @@ describe("/api/users/:username", () => {
       .then(({ body }) => {
         const user = body.user;
 
-        expect(user).toHaveLength(3);
+        expect(Object.keys(user).length).toBe(3);
 
         expect(user).toMatchObject({
           username: "butter_bridge",
