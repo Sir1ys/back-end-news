@@ -49,6 +49,7 @@ exports.fetchArticles = (
     .then((data) => {
       const topicGreenList = data[0];
       const sort_byGreenList = Object.keys(data[1].article);
+      sort_byGreenList.push("comment_count");
 
       if (!sort_byGreenList.includes(sort_by)) {
         return Promise.reject({ msg: "Wrong sort_by query", status: 400 });
@@ -82,7 +83,7 @@ ORDER BY articles.${sort_by} ${order}`;
     })
     .then(({ rows }) => {
       if (p === undefined) {
-        return {articles: rows};
+        return { articles: rows };
       }
 
       const total_count = this.fetchArticles();
