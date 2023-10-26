@@ -73,7 +73,9 @@ exports.fetchArticles = (
         });
       }
       query += ` GROUP BY articles.article_id
-ORDER BY articles.${sort_by} ${order}`;
+ORDER BY ${
+        sort_by === "comment_count" ? "comment_count" : articles.sort_by
+      } ${order}`;
 
       if (p) {
         query += ` LIMIT ${limit} OFFSET ${p * limit}`;
