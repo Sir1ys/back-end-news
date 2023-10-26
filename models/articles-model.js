@@ -72,7 +72,9 @@ exports.fetchArticles = (
         });
       }
       query += ` GROUP BY articles.article_id
-ORDER BY articles.${sort_by} ${order}`;
+ORDER BY ${
+        sort_by === "comment_count" ? "comment_count" : articles.sort_by
+      } ${order}`;
 
       if (p) {
         query += ` LIMIT ${limit} OFFSET ${p * limit}`;
@@ -82,7 +84,7 @@ ORDER BY articles.${sort_by} ${order}`;
     })
     .then(({ rows }) => {
       if (p === undefined) {
-        return {articles: rows};
+        return { articles: rows };
       }
 
       const total_count = this.fetchArticles();
