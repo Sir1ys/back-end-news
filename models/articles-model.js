@@ -74,7 +74,7 @@ exports.fetchArticles = (
       }
       query += ` GROUP BY articles.article_id
 ORDER BY ${
-        sort_by === "comment_count" ? "comment_count" : articles.sort_by
+        sort_by === "comment_count" ? "comment_count" : 'articles'.sort_by
       } ${order}`;
 
       if (p) {
