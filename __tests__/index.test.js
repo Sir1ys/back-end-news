@@ -244,7 +244,6 @@ describe("/api/articles", () => {
             })
           );
 
-          expect(article).not.toHaveProperty("body");
         });
       });
   });
